@@ -1,0 +1,43 @@
+u1 = User.objects.create_user('Alex') 
+u2 = User.objects.create_user('Victor') 
+a1 = Author.objects.create(authorUser = u1)
+a2 = Author.objects.create(authorUser = u2) 
+sport=Category.objects.create(name='sport') 
+politics=Category.objects.create(name='politics') 
+education=Category.objects.create(name='education') 
+science=Category.objects.create(name='science')   
+post_1 = Post.objects.create(author=a1, categoryType='NW', title='sport\'s title', text='text\'s text')
+post_2 = Post.objects.create(author=a2, categoryType='AR', title='politics\'s title', text='politics\'s text') 
+post_3 = Post.objects.create(author=a2, categoryType='AR', title='education\'s title', text='education\'s text') 
+post_1.postCategory.add(sport) 
+post_2.postCategory.add(politics) 
+post_2.postCategory.add(education) 
+comment_1 = Comment(commentPost=post_1, commentUser=u1, text='Текст первого комментария')
+comment_2 = Comment(commentPost=post_2, commentUser=u1, text='Текст втрого комментария')
+comment_3 = Comment(commentPost=post_2, commentUser=u2, text='Текст третьего комментария')
+comment_4 = Comment(commentPost=post_3, commentUser=u2, text='Текст четвертого комментария')
+post_1.like()
+post_1.like()
+post_2.like() 
+post_3.dislike() 
+post_1.like()
+post_1.like()
+comment_1.like()
+comment_2.dislike() 
+comment_3.like()  
+comment_4.like() 
+a1.update_rating() 
+a2.update_rating() 
+Author.objects.order_by('-ratingAuthor').values('authorUser__username', 'ratingAuthor')[0]
+Post.objects.filter(categoryType='AR').order_by('-rating').values('dateCreation', 'author__authorUser__username', 'rating', 'title')[0] 
+Post.objects.filter(categoryType='AR').order_by('-rating')[0].preview()
+best_article = Post.objects.filter(categoryType='AR').order_by('-rating')[0] 
+Comment.objects.filter(commentPost=best_article).values('dateCreation', 'commentUser__username', 'rating', 'text')
+
+
+
+
+
+
+
+
